@@ -20,6 +20,7 @@ jobs:
           install: >-
             mingw-w64-ucrt-x86_64-qt5-base
             mingw-w64-ucrt-x86_64-qt5-multimedia
+            mingw-w64-ucrt-x86_64-qt5-declarative
             mingw-w64-ucrt-x86_64-libssh
             mingw-w64-ucrt-x86_64-openssl
             mingw-w64-ucrt-x86_64-gcc
@@ -28,6 +29,8 @@ jobs:
       - name: Build project
         shell: msys2 {0}
         run: |
+          sed -i 's|Z:/.*||g' nesca_3.pro
+          sed -i 's|C:/.*||g' nesca_3.pro
           /ucrt64/bin/qmake-qt5 nesca_3.pro "INCLUDEPATH += /ucrt64/include" "LIBS += -L/ucrt64/lib -lssh -lssl -lcrypto"
           mingw32-make -j4
 
