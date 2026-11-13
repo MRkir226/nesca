@@ -15,18 +15,20 @@ jobs:
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: UCRT64
           update: true
           install: >-
-            mingw-w64-x86_64-qt5
-            mingw-w64-x86_64-libssh
-            mingw-w64-x86_64-openssl
-            mingw-w64-x86_64-toolchain
+            mingw-w64-ucrt-x86_64-qt5-base
+            mingw-w64-ucrt-x86_64-qt5-multimedia
+            mingw-w64-ucrt-x86_64-libssh
+            mingw-w64-ucrt-x86_64-openssl
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-make
 
       - name: Build project
         shell: msys2 {0}
         run: |
-          qmake nesca_3.pro "INCLUDEPATH += /mingw64/include" "LIBS += -L/mingw64/lib -lssh -lssl -lcrypto"
+          qmake nesca_3.pro "INCLUDEPATH += /ucrt64/include" "LIBS += -L/ucrt64/lib -lssh -lssl -lcrypto"
           mingw32-make -j4
 
       - name: Package release
@@ -35,7 +37,7 @@ jobs:
           mkdir dist
           cp release/nesca_3.exe dist/
           windeployqt dist/nesca_3.exe
-          cp /mingw64/bin/libssh.dll /mingw64/bin/libssl-*.dll /mingw64/bin/libcrypto-*.dll dist/
+          cp /ucrt64/bin/libssh.dll /ucrt64/bin/libssl-*.dll /ucrt64/bin/libcrypto-*.dll dist/
           cp *.txt *.ttf HCNetSDK.dll dist/ 2>/dev/null || true
 
       - name: Upload artifact
