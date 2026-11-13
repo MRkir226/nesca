@@ -23,6 +23,7 @@ jobs:
             mingw-w64-ucrt-x86_64-qt5-declarative
             mingw-w64-ucrt-x86_64-libssh
             mingw-w64-ucrt-x86_64-openssl
+            mingw-w64-ucrt-x86_64-curl
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-make
 
@@ -36,13 +37,12 @@ jobs:
           CONFIG += release c++11
           QMAKE_CXXFLAGS += -fpermissive -Wno-error
           INCLUDEPATH += . /ucrt64/include
-          LIBS += -L. -L/ucrt64/lib -lssh -lssl -lcrypto -lws2_32 -lwsock32
+          LIBS += -L. -L/ucrt64/lib -lssh -lssl -lcrypto -lcurl -lws2_32 -lwsock32
           exists(HCNetSDK.lib): LIBS += -lHCNetSDK
           SOURCES += $$files(*.cpp)
           HEADERS += $$files(*.h)
           FORMS += $$files(*.ui)
           RESOURCES += $$files(*.qrc)
-          exists(nesca_3.rc): RC_FILE = nesca_3.rc
           EOF
           /ucrt64/bin/qmake-qt5 nesca_3.pro
           mingw32-make -j4
@@ -53,7 +53,7 @@ jobs:
           mkdir -p dist
           cp release/nesca_3.exe dist/
           /ucrt64/bin/windeployqt-qt5 dist/nesca_3.exe
-          cp /ucrt64/bin/libssh.dll /ucrt64/bin/libssl-*.dll /ucrt64/bin/libcrypto-*.dll /ucrt64/bin/zlib1.dll /ucrt64/bin/libgcc_s_seh-1.dll /ucrt64/bin/libstdc++-6.dll /ucrt64/bin/libwinpthread-1.dll dist/ 2>/dev/null || true
+          cp /ucrt64/bin/libssh.dll /ucrt64/bin/libssl-*.dll /ucrt64/bin/libcrypto-*.dll /ucrt64/bin/libcurl-*.dll /ucrt64/bin/zlib1.dll /ucrt64/bin/libgcc_s_seh-1.dll /ucrt64/bin/libstdc++-6.dll /ucrt64/bin/libwinpthread-1.dll dist/ 2>/dev/null || true
           cp *.txt *.ttf *.dll *.ini *.cfg dist/ 2>/dev/null || true
 
       - name: Upload artifact
