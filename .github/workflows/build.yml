@@ -28,7 +28,7 @@ jobs:
       - name: Build project
         shell: msys2 {0}
         run: |
-          qmake nesca_3.pro "INCLUDEPATH += /ucrt64/include" "LIBS += -L/ucrt64/lib -lssh -lssl -lcrypto"
+          /ucrt64/bin/qmake-qt5 nesca_3.pro "INCLUDEPATH += /ucrt64/include" "LIBS += -L/ucrt64/lib -lssh -lssl -lcrypto"
           mingw32-make -j4
 
       - name: Package release
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir dist
           cp release/nesca_3.exe dist/
-          windeployqt dist/nesca_3.exe
+          /ucrt64/bin/windeployqt-qt5 dist/nesca_3.exe
           cp /ucrt64/bin/libssh.dll /ucrt64/bin/libssl-*.dll /ucrt64/bin/libcrypto-*.dll dist/
           cp *.txt *.ttf HCNetSDK.dll dist/ 2>/dev/null || true
 
